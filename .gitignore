@@ -1,0 +1,6 @@
+#Framework
+bin/*
+obj/*
+
+#IDE
+.vscode/*
