@@ -1,8 +1,7 @@
 ﻿using System;
-using System.IO;
 
 using cit.utilities;
-using cit.utilities.validators;
+using cit.tasks;
 
 namespace cit
 {
@@ -14,25 +13,13 @@ namespace cit
             {
                 Console.WriteLine($"Welcome to CIt. Version: {Constants.Version}");                
             }
-            if (args.Length == 2)
+            if (args[0] == "init")
             {
-                if (args[0] == "init")
-                {
-                    if (Validators.FileNameValidators.IsMatch(args[1]))
-                    {
-                        var fileName = $"{args[1]}.json";
-                        if (File.Exists(fileName))
-                        {
-                            Console.WriteLine("Environment already exists. Not creating it again.");
-                        }
-                        File.Create(fileName);                    
-                    }
-                    else
-                    {
-                        Console.WriteLine("Environment name should contain alphanumeric characters only. E.g staging, staging01, staging_1");
-                        return 1;
-                    }
-                }
+                return new InitTask(Console.WriteLine).HandleCommand(args);
+            }
+            if (args[0] ==  "delete")
+            {
+                return new DeleteTask(Console.WriteLine).HandleCommand(args);
             }
             return 0;
         }
