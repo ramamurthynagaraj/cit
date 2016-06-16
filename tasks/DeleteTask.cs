@@ -1,12 +1,11 @@
 using System;
 using System.IO;
-
 using cit.utilities;
 using cit.utilities.validators;
 
 namespace cit.tasks
 {
-    class DeleteTask
+    class DeleteTask : ITask
     {
         Action<string> _logger;
         public DeleteTask(Action<string> logger){
@@ -19,9 +18,14 @@ namespace cit.tasks
             {
                 envName = commands[1];
             }
+            if (envName == Constants.DefaultEnvName)
+            {
+                _logger("Cannot delete default environment name. Delete the directory instead.");
+                return 1;
+            }
             if (Validators.FileNameValidators.IsMatch(envName))
             {
-                var fileName = $"{envName}.json";
+                var fileName = FileHelper.GetFileNameFor(envName);
                 if (!File.Exists(fileName))
                 {
                     _logger($"Environment: {envName} does not exists. Please verify the supplied environment name.");
