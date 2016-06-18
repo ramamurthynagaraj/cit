@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using cit.utilities;
 using cit.utilities.validators;
 
@@ -23,15 +22,14 @@ namespace cit.tasks
                 _logger("Cannot delete default environment name. Delete the directory instead.");
                 return 1;
             }
-            if (Validators.FileNameValidators.IsMatch(envName))
+            if (Validators.EnvNameValidators.IsMatch(envName))
             {
-                var fileName = FileHelper.GetFileNameFor(envName);
-                if (!File.Exists(fileName))
+                if (!Store.IsEnvironmentExists(envName))
                 {
                     _logger($"Environment: {envName} does not exists. Please verify the supplied environment name.");
                     return 1;
                 }
-                File.Delete(fileName);
+                Store.Delete(envName);
                 _logger($"Environment: {envName} deleted successfully.");
             }
             else

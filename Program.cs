@@ -21,6 +21,10 @@ namespace cit
             {
                 return new DeleteTask(Console.WriteLine).HandleCommand(args);
             }
+            if (args[0] ==  "add")
+            {
+                return new AddTask(Console.WriteLine).HandleCommand(args);
+            }
             return 0;
         }
     }

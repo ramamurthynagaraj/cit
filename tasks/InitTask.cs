@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 using cit.utilities;
 using cit.utilities.validators;
@@ -19,21 +18,20 @@ namespace cit.tasks
             {
                 envName = commands[1];
             }
-            if (Validators.FileNameValidators.IsMatch(envName))
+            if (Validators.EnvNameValidators.IsMatch(envName))
             {
-                var fileName = FileHelper.GetFileNameFor(envName);
-                if (File.Exists(fileName))
+                if (Store.IsEnvironmentExists(envName))
                 {
                     _logger($"Environment: {envName} already exists. Not creating it again.");
                     return 1;
                 }
-                if (File.Exists(Constants.DefaultEnvName) && envName != Constants.DefaultEnvName)
+                if (Store.IsEnvironmentExists(Constants.DefaultEnvName) && envName != Constants.DefaultEnvName)
                 {
                     _logger($"Default environment not found.");
-                    File.Create(FileHelper.GetFileNameFor(Constants.DefaultEnvName));
+                    Store.Create(Constants.DefaultEnvName);
                     _logger($"Created default environment successfully.");
                 }
-                File.Create(fileName);
+                Store.Create(envName);
                 _logger($"Environment: {envName} created succesfully.");
             }
             else

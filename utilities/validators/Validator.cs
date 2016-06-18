@@ -4,6 +4,6 @@ namespace cit.utilities.validators
 {
     static class Validators
     {
-        public static Regex FileNameValidators { get; } = new Regex("[a-z_0-9]+");
+        public static Regex EnvNameValidators { get; } = new Regex("[a-z_0-9]+");
     }
 }
