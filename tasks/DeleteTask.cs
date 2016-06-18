@@ -7,36 +7,36 @@ namespace cit.tasks
     class DeleteTask : ITask
     {
         Action<string> _logger;
-        public DeleteTask(Action<string> logger){
+        public DeleteTask(Action<string> logger)
+        {
             _logger = logger;
         }
 
-        public int HandleCommand(string[] commands){
-            var envName = string.Empty;
-            if (commands.Length == 2)
+        public int HandleCommand(string[] commands)
+        {
+            if (commands.Length != 2)
             {
-                envName = commands[1];
+                _logger("Environment name not specified. Please specify one. E.g 'cit delete staging'");
+                return 1;
             }
+            var envName = commands[1];
             if (envName == Constants.DefaultEnvName)
             {
                 _logger("Cannot delete default environment name. Delete the directory instead.");
                 return 1;
             }
-            if (Validators.EnvNameValidators.IsMatch(envName))
-            {
-                if (!Store.IsEnvironmentExists(envName))
-                {
-                    _logger($"Environment: {envName} does not exists. Please verify the supplied environment name.");
-                    return 1;
-                }
-                Store.Delete(envName);
-                _logger($"Environment: {envName} deleted successfully.");
-            }
-            else
+            if (!Validators.EnvNameValidator.IsMatch(envName))
             {
                 _logger("Environment name cannot be empty and should contain alphanumeric characters. E.g staging, staging01, staging_1");
                 return 1;
             }
+            if (!Store.IsEnvironmentExists(envName))
+            {
+                _logger($"Environment: {envName} does not exists. Please verify the supplied environment name.");
+                return 1;
+            }
+            Store.Delete(envName);
+            _logger($"Environment: {envName} deleted successfully.");
             return 0;
         }
     }

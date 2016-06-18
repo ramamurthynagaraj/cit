@@ -104,7 +104,7 @@
           "ref/netstandard1.0/Microsoft.CSharp.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/Microsoft.CSharp.dll": {}
         }
       },
       "Microsoft.NETCore.App/1.0.0-rc2-3002702": {
@@ -296,13 +296,37 @@
           "System.Xml.XDocument": "4.0.11-rc2-24027"
         }
       },
-      "Newtonsoft.Json/8.0.3": {
+      "Newtonsoft.Json/9.0.1-beta1": {
         "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.0.1-rc2-24027",
+          "System.Collections": "4.0.11-rc2-24027",
+          "System.Diagnostics.Debug": "4.0.11-rc2-24027",
+          "System.Dynamic.Runtime": "4.0.11-rc2-24027",
+          "System.Globalization": "4.0.11-rc2-24027",
+          "System.IO": "4.1.0-rc2-24027",
+          "System.Linq": "4.1.0-rc2-24027",
+          "System.Linq.Expressions": "4.0.11-rc2-24027",
+          "System.ObjectModel": "4.0.12-rc2-24027",
+          "System.Reflection": "4.1.0-rc2-24027",
+          "System.Reflection.Extensions": "4.0.1-rc2-24027",
+          "System.Resources.ResourceManager": "4.0.1-rc2-24027",
+          "System.Runtime": "4.1.0-rc2-24027",
+          "System.Runtime.Extensions": "4.1.0-rc2-24027",
+          "System.Runtime.Serialization.Primitives": "4.1.1-rc2-24027",
+          "System.Text.Encoding": "4.0.11-rc2-24027",
+          "System.Text.Encoding.Extensions": "4.0.11-rc2-24027",
+          "System.Text.RegularExpressions": "4.0.12-rc2-24027",
+          "System.Threading": "4.0.11-rc2-24027",
+          "System.Threading.Tasks": "4.0.11-rc2-24027",
+          "System.Xml.ReaderWriter": "4.0.11-rc2-24027",
+          "System.Xml.XDocument": "4.0.11-rc2-24027"
+        },
         "compile": {
-          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+          "lib/netstandard1.0/Newtonsoft.Json.dll": {}
         },
         "runtime": {
-          "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+          "lib/netstandard1.0/Newtonsoft.Json.dll": {}
         }
       },
       "runtime.native.System/4.0.0-rc2-24027": {
@@ -608,7 +632,7 @@
           "ref/netstandard1.3/System.Dynamic.Runtime.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Dynamic.Runtime.dll": {}
         }
       },
       "System.Globalization/4.0.11-rc2-24027": {
@@ -729,7 +753,7 @@
           "ref/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
         }
       },
       "System.IO.FileSystem.Watcher/4.0.0-rc2-24027": {
@@ -817,7 +841,7 @@
           "ref/netstandard1.5/System.Linq.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.5/_._": {}
+          "lib/netstandard1.5/System.Linq.dll": {}
         }
       },
       "System.Linq.Expressions/4.0.11-rc2-24027": {
@@ -845,7 +869,7 @@
           "ref/netstandard1.3/System.Linq.Expressions.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Linq.Expressions.dll": {}
         }
       },
       "System.Linq.Parallel/4.0.1-rc2-24027": {
@@ -1086,7 +1110,7 @@
           "ref/netstandard1.3/System.ObjectModel.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.ObjectModel.dll": {}
         }
       },
       "System.Reflection/4.1.0-rc2-24027": {
@@ -1134,7 +1158,7 @@
           "ref/netstandard1.1/_._": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Reflection.Emit.dll": {}
         }
       },
       "System.Reflection.Emit.ILGeneration/4.0.1-rc2-24027": {
@@ -1148,7 +1172,7 @@
           "ref/netstandard1.0/_._": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Reflection.Emit.ILGeneration.dll": {}
         }
       },
       "System.Reflection.Emit.Lightweight/4.0.1-rc2-24027": {
@@ -1163,7 +1187,7 @@
           "ref/netstandard1.0/_._": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Reflection.Emit.Lightweight.dll": {}
         }
       },
       "System.Reflection.Extensions/4.0.1-rc2-24027": {
@@ -1221,7 +1245,7 @@
           "ref/netstandard1.5/System.Reflection.TypeExtensions.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.5/_._": {}
+          "lib/netstandard1.5/System.Reflection.TypeExtensions.dll": {}
         }
       },
       "System.Resources.Reader/4.0.0-rc2-24027": {
@@ -1298,7 +1322,7 @@
           "ref/netstandard1.3/System.Runtime.InteropServices.PInvoke.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Runtime.InteropServices.PInvoke.dll": {}
         }
       },
       "System.Runtime.InteropServices.RuntimeInformation/4.0.0-rc2-24027": {
@@ -1337,6 +1361,19 @@
         },
         "runtime": {
           "lib/netstandard1.3/_._": {}
+        }
+      },
+      "System.Runtime.Serialization.Primitives/4.1.1-rc2-24027": {
+        "type": "package",
+        "dependencies": {
+          "System.Resources.ResourceManager": "4.0.1-rc2-24027",
+          "System.Runtime": "4.1.0-rc2-24027"
+        },
+        "compile": {
+          "ref/netstandard1.3/System.Runtime.Serialization.Primitives.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/System.Runtime.Serialization.Primitives.dll": {}
         }
       },
       "System.Security.Claims/4.0.1-rc2-24027": {
@@ -1635,7 +1672,7 @@
           "ref/netstandard1.3/System.Text.RegularExpressions.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Text.RegularExpressions.dll": {}
         }
       },
       "System.Threading/4.0.11-rc2-24027": {
@@ -1648,7 +1685,7 @@
           "ref/netstandard1.3/System.Threading.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Threading.dll": {}
         }
       },
       "System.Threading.Overlapped/4.0.1-rc2-24027": {
@@ -1710,7 +1747,7 @@
           "lib/netstandard1.0/System.Threading.Tasks.Extensions.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.0/_._": {}
+          "lib/netstandard1.0/System.Threading.Tasks.Extensions.dll": {}
         }
       },
       "System.Threading.Tasks.Parallel/4.0.1-rc2-24027": {
@@ -1789,7 +1826,7 @@
           "ref/netstandard1.3/System.Xml.ReaderWriter.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Xml.ReaderWriter.dll": {}
         }
       },
       "System.Xml.XDocument/4.0.11-rc2-24027": {
@@ -1812,7 +1849,7 @@
           "ref/netstandard1.3/System.Xml.XDocument.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
       },
       "System.Xml.XmlDocument/4.0.1-rc2-24027": {
@@ -2215,11 +2252,11 @@
         "dotnet_library_license.txt"
       ]
     },
-    "Newtonsoft.Json/8.0.3": {
-      "sha512": "KGsYQdS2zLH+H8x2cZaSI7e+YZ4SFIbyy1YJQYl6GYBWjf5o4H1A68nxyq+WTyVSOJQ4GqS/DiPE+UseUizgMg==",
+    "Newtonsoft.Json/9.0.1-beta1": {
+      "sha512": "eGdISZNV16lWnDPHjfgBVcoyihASk/zsoXLN3r2uZYnXisiTUWKF8Xmgza3EtEFOMbYTmjUqBEjjT7Lx7ilK/w==",
       "type": "package",
       "files": [
-        "Newtonsoft.Json.8.0.3.nupkg.sha512",
+        "Newtonsoft.Json.9.0.1-beta1.nupkg.sha512",
         "Newtonsoft.Json.nuspec",
         "lib/net20/Newtonsoft.Json.dll",
         "lib/net20/Newtonsoft.Json.xml",
@@ -2229,10 +2266,12 @@
         "lib/net40/Newtonsoft.Json.xml",
         "lib/net45/Newtonsoft.Json.dll",
         "lib/net45/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
         "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.dll",
         "lib/portable-net40+sl5+wp80+win8+wpa81/Newtonsoft.Json.xml",
-        "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll",
-        "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.xml",
+        "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.dll",
+        "lib/portable-net45+wp80+win8+wpa81/Newtonsoft.Json.xml",
         "tools/install.ps1"
       ]
     },
@@ -5210,6 +5249,76 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
+    "System.Runtime.Serialization.Primitives/4.1.1-rc2-24027": {
+      "sha512": "CatEVkKtMZlBrsdboi2RNediIXkYaiKtseORboHASI96mYtlPvivmHr/nw+pKx7s7enaFvs5Ovfbc8uXs5Qt7Q==",
+      "type": "package",
+      "files": [
+        "System.Runtime.Serialization.Primitives.4.1.1-rc2-24027.nupkg.sha512",
+        "System.Runtime.Serialization.Primitives.nuspec",
+        "ThirdPartyNotices.txt",
+        "dotnet_library_license.txt",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net45/_._",
+        "lib/net46/System.Runtime.Serialization.Primitives.dll",
+        "lib/netcore50/System.Runtime.Serialization.Primitives.dll",
+        "lib/netstandard1.3/System.Runtime.Serialization.Primitives.dll",
+        "lib/portable-net45+win8+wp8+wpa81/_._",
+        "lib/win8/_._",
+        "lib/wp80/_._",
+        "lib/wpa81/_._",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net45/_._",
+        "ref/net46/System.Runtime.Serialization.Primitives.dll",
+        "ref/netcore50/System.Runtime.Serialization.Primitives.dll",
+        "ref/netcore50/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/de/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/es/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/fr/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/it/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/ja/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/ko/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/ru/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/zh-hans/System.Runtime.Serialization.Primitives.xml",
+        "ref/netcore50/zh-hant/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/System.Runtime.Serialization.Primitives.dll",
+        "ref/netstandard1.0/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/de/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/es/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/fr/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/it/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/ja/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/ko/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/ru/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/zh-hans/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.0/zh-hant/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/System.Runtime.Serialization.Primitives.dll",
+        "ref/netstandard1.3/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/de/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/es/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/fr/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/it/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/ja/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/ko/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/ru/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/zh-hans/System.Runtime.Serialization.Primitives.xml",
+        "ref/netstandard1.3/zh-hant/System.Runtime.Serialization.Primitives.xml",
+        "ref/portable-net45+win8+wp8+wpa81/_._",
+        "ref/win8/_._",
+        "ref/wp80/_._",
+        "ref/wpa81/_._",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/aot/lib/netcore50/System.Runtime.Serialization.Primitives.dll"
+      ]
+    },
     "System.Security.Claims/4.0.1-rc2-24027": {
       "sha512": "9oxucsKjs8q2UZHHx6tQm78uXzAiCWE7MVbxUmLlVzCRXLKtzjWCgZqHzCjg37GHMvi326PhblnOI222CGW2GA==",
       "type": "package",
@@ -6375,7 +6484,7 @@
   "projectFileDependencyGroups": {
     "": [
       "Microsoft.NETCore.App >= 1.0.0-rc2-3002702",
-      "Newtonsoft.Json >= 8.0.3"
+      "Newtonsoft.Json >= 9.0.1-beta1"
     ],
     ".NETCoreApp,Version=v1.0": []
   },

@@ -1,5 +1,8 @@
 using System;
 
+using cit.utilities;
+using cit.utilities.validators;
+
 namespace cit.tasks
 {
     public class AddTask : ITask
@@ -13,11 +16,24 @@ namespace cit.tasks
         public int HandleCommand(string[] commands)
         {
             if(commands.Length != 4){
-                _logger("Parameters missig, mention all parameters. E.g 'cit staging add key value', 'cit staging add key \"value with spaces\"'");
+                _logger("Parameters missig, mention all parameters. E.g 'cit add staging key value', 'cit add staging key \"value with spaces\"'");
                 return 1;
             }
+            var envName = commands[1];
+            var keyName =  commands[2];
+            if(!Store.IsEnvironmentExists(envName))
+            {
+                _logger($"Environment: {envName} does not exist. Create one using 'cit init {envName}' before proceeding.");
+                return 1;
+            }
+            if(!Validators.KeyNameValidator.IsMatch(keyName))
+            {
+                _logger($"Keyname: '{keyName}' should contain alphanumeric characters. E.g key, key01, key_1");
+                return 1;
+            }
+            Store.Add(envName, keyName, commands[3]);
+            _logger("Added the key successfully");
             return 0;
         }
-
     }
 }
