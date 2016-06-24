@@ -21,6 +21,7 @@ namespace cit.tasks
             }
             var envName = commands[1];
             var keyName =  commands[2];
+            var itemValue = commands[3];
             if(!Store.IsEnvironmentExists(envName))
             {
                 _logger($"Environment: {envName} does not exist. Create one using 'cit init {envName}' before proceeding.");
@@ -31,8 +32,8 @@ namespace cit.tasks
                 _logger($"Keyname: '{keyName}' should contain alphanumeric characters. E.g key, key01, key_1");
                 return 1;
             }
-            Store.Add(envName, keyName, commands[3]);
-            _logger("Added the key successfully");
+            Store.Add(envName, keyName, itemValue);
+            _logger($"Key: {keyName}, Value: {itemValue} added to Environment: {envName} successfully.");
             return 0;
         }
     }

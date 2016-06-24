@@ -4,25 +4,26 @@ using cit.utilities.validators;
 
 namespace cit.tasks
 {
-    class DeleteTask : ITask
+    class RemoveTask : ITask
     {
         Action<string> _logger;
-        public DeleteTask(Action<string> logger)
+        public RemoveTask(Action<string> logger)
         {
             _logger = logger;
         }
 
         public int HandleCommand(string[] commands)
         {
-            if (commands.Length != 2)
+            if (commands.Length != 3)
             {
-                _logger("Environment name not specified. Please specify one. E.g 'cit delete staging'");
+                _logger("Environment name and key name not specified correctly. Please specify properly. E.g 'cit remove staging key'");
                 return 1;
             }
             var envName = commands[1];
+            var keyName =  commands[2];
             if (envName == Constants.DefaultEnvName)
             {
-                _logger("Cannot delete default environment name. Delete the directory instead.");
+                _logger("Removing the key from default environment will delete it from other environment as well.");
                 return 1;
             }
             if (!Validators.EnvNameValidator.IsMatch(envName))
@@ -35,8 +36,13 @@ namespace cit.tasks
                 _logger($"Environment: {envName} does not exists. Please verify the supplied environment name.");
                 return 1;
             }
-            Store.Delete(envName);
-            _logger($"Environment: {envName} deleted successfully.");
+            if(!Validators.KeyNameValidator.IsMatch(keyName))
+            {
+                _logger($"Keyname: '{keyName}' should contain alphanumeric characters. E.g key, key01, key_1");
+                return 1;
+            }
+            Store.Remove(envName, keyName);
+            _logger($"Key: {keyName} deleted from Environment: {envName} successfully.");
             return 0;
         }
     }
