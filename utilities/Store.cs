@@ -6,6 +6,7 @@ namespace cit.utilities
 {
     class Store
     {
+        private const string MetaDataFile = "cit-environments.json";
         private static string GetFileNameFor(string envName)
         {
             return $"{envName}.json";
@@ -16,21 +17,41 @@ namespace cit.utilities
             return File.Exists(GetFileNameFor(envName));
         }
 
+        public static void Copy(string fromEnv, string toEnv)
+        {
+            File.Copy(GetFileNameFor(fromEnv), GetFileNameFor(toEnv));
+            AddNewEnvironmentEntry(toEnv);
+        }
+
         public static void Create(string envName)
         {
             File.Create(GetFileNameFor(envName)).Dispose();
-            var defaultEnv = GetFileNameFor(Constants.DefaultEnvName);
-            var defaultEnvJson = GetJsonForFile(defaultEnv);
-            var newEnvironment = JObject.Parse($"{{'environment': ['{envName}']}}");
-            defaultEnvJson.Merge(newEnvironment, new JsonMergeSettings{
-                MergeArrayHandling = MergeArrayHandling.Union
-            });
-            File.WriteAllText(defaultEnv, defaultEnvJson.ToString());
+            AddNewEnvironmentEntry(envName);
         }
 
-        public static void Clean(string envName)
+        private static void AddNewEnvironmentEntry(string envName)
+        {
+            var defaultEnvJson = GetJsonForFile(MetaDataFile);
+            var newEnvironment = JObject.Parse($"{{'environments': ['{envName}']}}");
+            defaultEnvJson.Merge(newEnvironment, new JsonMergeSettings
+            {
+                MergeArrayHandling = MergeArrayHandling.Union
+            });
+            File.WriteAllText(MetaDataFile, defaultEnvJson.ToString());
+        }
+
+        public static void Delete(string envName)
         {
             File.Delete(GetFileNameFor(envName));
+            RemoveEnvironmentEntry(envName);
+        }
+
+        private static void RemoveEnvironmentEntry(string envName)
+        {
+            var defaultEnvJson = GetJsonForFile(MetaDataFile);
+            defaultEnvJson["environments"].Where(env => env.Value<string>() == envName)
+                .ToList().ForEach(env => env.Remove());
+            File.WriteAllText(MetaDataFile, defaultEnvJson.ToString());
         }
 
         public static void Add(string envName, string keyName, string value)
@@ -58,8 +79,12 @@ namespace cit.utilities
 
         private static JObject GetJsonForFile(string fileName)
         {
-            var fileContent = File.ReadAllText(fileName);
-            return JObject.Parse(string.IsNullOrEmpty(fileContent) ? @"{'cit': {}}": fileContent);
+            var fileContent = string.Empty;
+            if(File.Exists(fileName))
+            {
+                fileContent = File.ReadAllText(fileName);
+            }
+            return JObject.Parse(string.IsNullOrEmpty(fileContent) ? @"{}": fileContent);
         }
     }
 }

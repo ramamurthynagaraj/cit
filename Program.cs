@@ -2,6 +2,7 @@
 
 using cit.utilities;
 using cit.tasks;
+using System.Collections.Generic;
 
 namespace cit
 {
@@ -13,24 +14,24 @@ namespace cit
             {
                 Console.WriteLine($"Welcome to CIt. Version: {Constants.Version} .");                
             }
-            if (args[0] == "init")
+            return GetTaskFor(args[0]).HandleCommand(args);
+        }
+
+        private static ITask GetTaskFor(string command)
+        {
+            var tasks = new Dictionary<string, ITask>
             {
-                return new InitTask(Console.WriteLine).HandleCommand(args);
-            }
-            if (args[0] ==  "clean")
+                {"init", new InitTask(Console.WriteLine)},
+                {"clean", new CleanTask(Console.WriteLine)},
+                {"add", new AddTask(Console.WriteLine)},
+                {"remove", new RemoveTask(Console.WriteLine)},
+                {"copy", new CopyTask(Console.WriteLine)}
+            };
+            if(tasks.ContainsKey(command))
             {
-                return new CleanTask(Console.WriteLine).HandleCommand(args);
+                return tasks[command];
             }
-            if (args[0] ==  "add")
-            {
-                return new AddTask(Console.WriteLine).HandleCommand(args);
-            }
-            if (args[0] ==  "remove")
-            {
-                return new RemoveTask(Console.WriteLine).HandleCommand(args);
-            }
-            Console.WriteLine("Provided command not found.");
-            return 0;
+            return new HelpTask(Console.WriteLine);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace cit.tasks
                 _logger($"Environment: {envName} does not exists. Please verify the supplied environment name.");
                 return 1;
             }
-            Store.Clean(envName);
+            Store.Delete(envName);
             _logger($"Environment: {envName} deleted successfully.");
             return 0;
         }
