@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
@@ -56,6 +57,10 @@ namespace cit.utilities
 
         public static void Add(string envName, string keyName, string value)
         {
+            if(envName != Constants.DefaultEnvName && !HasDefaultValueFor(keyName))
+            {
+                throw new NoDefaultValueFoundException("Cannot override without a default value. Please add default value first.");
+            }
             var fileName = GetFileNameFor(envName);
             var existingJson = GetJsonForFile(fileName);
             var newItem = JObject.Parse($"{{'cit': {{'{keyName}': '{value}'}}}}");
@@ -63,6 +68,12 @@ namespace cit.utilities
                 MergeArrayHandling = MergeArrayHandling.Union
             });
             File.WriteAllText(fileName, existingJson.ToString());
+        }
+
+        private static bool HasDefaultValueFor(string keyName)
+        {
+            var defaultJson = GetJsonForFile(GetFileNameFor(Constants.DefaultEnvName));
+            return defaultJson["cit"]?[keyName] != null;
         }
 
         public static void Remove(string envName, string keyName)
@@ -85,6 +96,13 @@ namespace cit.utilities
                 fileContent = File.ReadAllText(fileName);
             }
             return JObject.Parse(string.IsNullOrEmpty(fileContent) ? @"{}": fileContent);
+        }
+    }
+
+    public class NoDefaultValueFoundException : Exception
+    {
+        public NoDefaultValueFoundException(string message) : base(message)
+        {
         }
     }
 }

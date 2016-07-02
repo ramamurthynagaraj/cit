@@ -32,7 +32,15 @@ namespace cit.tasks
                 _logger($"Keyname: '{keyName}' should contain alphanumeric characters. E.g key, key01, key_1");
                 return 1;
             }
-            Store.Add(envName, keyName, itemValue);
+            try
+            {
+                Store.Add(envName, keyName, itemValue);
+            }
+            catch(NoDefaultValueFoundException ex)
+            {
+                _logger(ex.Message);
+                return 1;
+            }
             _logger($"Key: {keyName}, Value: {itemValue} added to Environment: {envName} successfully.");
             return 0;
         }
