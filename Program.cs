@@ -24,6 +24,7 @@ namespace cit
                 {"init", new InitTask(Console.WriteLine)},
                 {"clean", new CleanTask(Console.WriteLine)},
                 {"add", new AddTask(Console.WriteLine)},
+                {"apply", new ApplyTask(Console.WriteLine)},
                 {"remove", new RemoveTask(Console.WriteLine)},
                 {"copy", new CopyTask(Console.WriteLine)}
             };

@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using static cit.utilities.Constants;
 
 namespace cit.utilities
 {
     class Store
     {
+        public static string AppName = "cit";
         private const string MetaDataFile = "cit-environments.json";
         private static string GetFileNameFor(string envName)
         {
@@ -41,6 +46,22 @@ namespace cit.utilities
             File.WriteAllText(MetaDataFile, defaultEnvJson.ToString());
         }
 
+        public static Dictionary<string, string> GetFinalValuesFor(List<string> environments)
+        {
+            if(!environments.Any(env => env == DefaultEnvName))
+            {
+                environments.Insert(0, DefaultEnvName);
+            }
+            var finalJson = environments.Distinct().Select(env => GetJsonForFile(GetFileNameFor(env)).GetValue(AppName) as JObject)
+                .Aggregate((firstJson, secondJson) => {
+                    firstJson.Merge(secondJson, new JsonMergeSettings{
+                        MergeArrayHandling = MergeArrayHandling.Replace
+                    });
+                    return firstJson;
+                });
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(finalJson.ToString());
+        }
+
         public static void Delete(string envName)
         {
             File.Delete(GetFileNameFor(envName));
@@ -57,13 +78,13 @@ namespace cit.utilities
 
         public static void Add(string envName, string keyName, string value)
         {
-            if(envName != Constants.DefaultEnvName && !HasDefaultValueFor(keyName))
+            if(envName != DefaultEnvName && !HasDefaultValueFor(keyName))
             {
                 throw new NoDefaultValueFoundException("Cannot override without a default value. Please add default value first.");
             }
             var fileName = GetFileNameFor(envName);
             var existingJson = GetJsonForFile(fileName);
-            var newItem = JObject.Parse($"{{'cit': {{'{keyName}': '{value}'}}}}");
+            var newItem = JObject.Parse($"{{'{AppName}': {{'{keyName}': '{value}'}}}}");
             existingJson.Merge(newItem, new JsonMergeSettings{
                 MergeArrayHandling = MergeArrayHandling.Union
             });
@@ -72,15 +93,15 @@ namespace cit.utilities
 
         private static bool HasDefaultValueFor(string keyName)
         {
-            var defaultJson = GetJsonForFile(GetFileNameFor(Constants.DefaultEnvName));
-            return defaultJson["cit"]?[keyName] != null;
+            var defaultJson = GetJsonForFile(GetFileNameFor(DefaultEnvName));
+            return defaultJson[AppName]?[keyName] != null;
         }
 
         public static void Remove(string envName, string keyName)
         {
             var fileName = GetFileNameFor(envName);
             var existingJson = GetJsonForFile(fileName);
-            var allKeys = existingJson.GetValue("cit") as JObject;
+            var allKeys = existingJson.GetValue(AppName) as JObject;
             if(allKeys.Properties().Any(p => p.Name == keyName))
             {
                 allKeys.Property(keyName).Remove();
