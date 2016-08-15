@@ -5,7 +5,7 @@ using cit.utilities.validators;
 
 namespace cit.tasks
 {
-    public class AddTask : ITask
+    class AddTask : ITask
     {
         Action<string> _logger;
 

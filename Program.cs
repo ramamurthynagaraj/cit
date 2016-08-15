@@ -12,7 +12,7 @@ namespace cit
         {
             if (args.Length == 0)
             {
-                Console.WriteLine($"Welcome to CIt. Version: {Constants.Version} .");                
+                Console.WriteLine($"Welcome to CIt. Version: {Constants.Version}");                
             }
             return GetTaskFor(args[0]).HandleCommand(args);
         }
