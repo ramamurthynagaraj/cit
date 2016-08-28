@@ -5,7 +5,7 @@ using cit.utilities.validators;
 
 namespace cit.tasks
 {
-    class CleanTask : ITask
+    class CleanTask
     {
         Action<string> _logger;
         public CleanTask(Action<string> logger)
@@ -13,9 +13,8 @@ namespace cit.tasks
             _logger = logger;
         }
 
-        public int HandleCommand(string[] commands)
+        public int HandleCommand(CleanCommand command)
         {
-            var command = Parse(commands);
             if (command == null) 
             {
                 return 1;
@@ -38,18 +37,6 @@ namespace cit.tasks
             Store.Delete(command.EnvName);
             _logger($"Environment: {command.EnvName} deleted successfully.");
             return 0;
-        }
-
-        private CleanCommand Parse(string[] commands)
-        {
-            if (commands.Length != 2)
-            {
-                _logger("Environment name not specified. Please specify one. E.g 'cit clean staging'");
-                return null;
-            }
-            return new CleanCommand {
-                EnvName = commands[1]
-            };
         }
     }
 }

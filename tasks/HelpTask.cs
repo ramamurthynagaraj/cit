@@ -2,7 +2,7 @@ using System;
 
 namespace cit.tasks
 {
-    class HelpTask : ITask
+    class HelpTask
     {
         Action<string> _logger;
         public HelpTask(Action<string> logger)

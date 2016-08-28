@@ -5,7 +5,7 @@ using cit.utilities.validators;
 
 namespace cit.tasks
 {
-    class CopyTask : ITask
+    class CopyTask
     {
         Action<string> _logger;
         public CopyTask(Action<string> logger)
@@ -13,28 +13,14 @@ namespace cit.tasks
             _logger = logger;
         }
 
-        public int HandleCommand(string[] commands)
+        public int HandleCommand(CopyCommand command)
         {
-            var command = Parse(commands);
             if(command == null)
             {
                 return 1;
             }
 
             return CopyEnvironment(command.FromEnvName, command.ToEnvName);
-        }
-
-        private CopyCommand Parse(string[] commands)
-        {
-            if (commands.Length != 3)
-            {
-                _logger("Wrong number of parameters specified");
-                return null;
-            }
-            return new CopyCommand {
-                FromEnvName = commands[0],
-                ToEnvName = commands[1]
-            };
         }
 
         internal int CopyEnvironment(string fromEnv, string envName)

@@ -5,7 +5,7 @@ using cit.utilities.validators;
 
 namespace cit.tasks
 {
-    class AddTask : ITask
+    class AddTask
     {
         Action<string> _logger;
 
@@ -13,9 +13,8 @@ namespace cit.tasks
             _logger = logger;
         }
 
-        public int HandleCommand(string[] commands)
+        public int HandleCommand(AddCommand command)
         {
-            var command = Parse(commands);
             if(command == null)
             {
                 return 1;
@@ -41,20 +40,6 @@ namespace cit.tasks
             }
             _logger($"Key: {command.KeyName}, Value: {command.ItemValue} added to Environment: {command.EnvName} successfully.");
             return 0;
-        }
-
-        private AddCommand Parse(string[] commands)
-        {
-            if(commands.Length != 4){
-                _logger("Parameters missig, mention all parameters. E.g 'cit add staging key value', 'cit add staging key \"value with spaces\"'");
-                return null;
-            }
-
-            return new AddCommand {
-                EnvName = commands[1],
-                KeyName = commands[2],
-                ItemValue = commands[3]
-            };
         }
     }
 }

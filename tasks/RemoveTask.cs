@@ -5,7 +5,7 @@ using cit.utilities.validators;
 
 namespace cit.tasks
 {
-    class RemoveTask : ITask
+    class RemoveTask
     {
         Action<string> _logger;
         public RemoveTask(Action<string> logger)
@@ -13,9 +13,8 @@ namespace cit.tasks
             _logger = logger;
         }
 
-        public int HandleCommand(string[] commands)
+        public int HandleCommand(RemoveCommand command)
         {
-            var command = Parse(commands);
             if(command == null)
             {
                 return 1;
@@ -43,19 +42,6 @@ namespace cit.tasks
             Store.Remove(command.EnvName, command.KeyName);
             _logger($"Key: {command.KeyName} deleted from Environment: {command.EnvName} successfully.");
             return 0;
-        }
-
-        private RemoveCommand Parse(string[] commands)
-        {
-            if (commands.Length != 3)
-            {
-                _logger("Environment name and key name not specified correctly. Please specify properly. E.g 'cit remove staging key'");
-                return null;
-            }
-            return new RemoveCommand {
-                EnvName = commands[1],
-                KeyName = commands[2]
-            };
         }
     }
 }

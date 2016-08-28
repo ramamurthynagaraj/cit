@@ -4,7 +4,7 @@ using cit.utilities;
 
 namespace cit.tasks
 {
-    class InitTask : ITask
+    class InitTask
     {
         Action<string> _logger;
         public InitTask(Action<string> logger)
@@ -12,9 +12,8 @@ namespace cit.tasks
             _logger = logger;
         }
 
-        public int HandleCommand(string[] commands)
+        public int HandleCommand(InitCommand command)
         {
-            var command = Parse(commands);
             if(command == null)
             {
                 return 1;
@@ -27,23 +26,6 @@ namespace cit.tasks
                 return 0;
             }
             return new CopyTask(_logger).CopyEnvironment(Constants.DefaultEnvName, command.EnvName);
-        }
-
-        private InitCommand Parse(string[] commands)
-        {
-            if(commands.Length != 1 && commands.Length != 2)
-            {
-                _logger("Wrong number of parameters specified");
-                return null;
-            }
-            var envName = Constants.DefaultEnvName;
-            if(commands.Length == 2)
-            {
-                envName = commands[1];
-            }
-            return new InitCommand{
-                EnvName = envName
-            };
         }
     }
 }

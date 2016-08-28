@@ -3,6 +3,7 @@
 using cit.utilities;
 using cit.tasks;
 using System.Collections.Generic;
+using cit.cli;
 
 namespace cit
 {
@@ -14,25 +15,25 @@ namespace cit
             {
                 Console.WriteLine($"Welcome to CIt. Version: {Constants.Version}");                
             }
-            return GetTaskFor(args[0]).HandleCommand(args);
+            return GetTaskFor(args[0], new Parser(Console.WriteLine)).Invoke(args);
         }
 
-        private static ITask GetTaskFor(string command)
+        private static Func<string[], int> GetTaskFor(string command, Parser parser)
         {
-            var tasks = new Dictionary<string, ITask>
+            var tasks = new Dictionary<string, Func<string[], int>>
             {
-                {"init", new InitTask(Console.WriteLine)},
-                {"clean", new CleanTask(Console.WriteLine)},
-                {"add", new AddTask(Console.WriteLine)},
-                {"apply", new ApplyTask(Console.WriteLine)},
-                {"remove", new RemoveTask(Console.WriteLine)},
-                {"copy", new CopyTask(Console.WriteLine)}
+                {"init", (args) => new InitTask(Console.WriteLine).HandleCommand(parser.TryInitCommand(args))},
+                {"clean", (args) => new CleanTask(Console.WriteLine).HandleCommand(parser.TryCleanCommand(args))},
+                {"add", (args) => new AddTask(Console.WriteLine).HandleCommand(parser.TryAddCommand(args))},
+                {"apply", (args) => new ApplyTask(Console.WriteLine).HandleCommand(parser.TryApplyCommand(args))},
+                {"remove", (args) => new RemoveTask(Console.WriteLine).HandleCommand(parser.TryRemoveCommand(args))},
+                {"copy", (args) => new CopyTask(Console.WriteLine).HandleCommand(parser.TryCopyCommand(args))}
             };
             if(tasks.ContainsKey(command))
             {
                 return tasks[command];
             }
-            return new HelpTask(Console.WriteLine);
+            return (args) => new HelpTask(Console.WriteLine).HandleCommand(args);
         }
     }
 }

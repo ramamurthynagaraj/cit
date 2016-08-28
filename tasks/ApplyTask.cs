@@ -7,7 +7,7 @@ using cit.tasks.commands;
 
 namespace cit.tasks
 {
-    class ApplyTask : ITask
+    class ApplyTask
     {
         Action<string> _logger;
 
@@ -15,9 +15,8 @@ namespace cit.tasks
             _logger = logger;
         }
 
-        public int HandleCommand(string[] commands)
+        public int HandleCommand(ApplyCommand command)
         {
-            var command = Parse(commands);
             if(command == null)
             {
                 return 1;
@@ -52,27 +51,6 @@ namespace cit.tasks
             return 0;
         }
 
-        private ApplyCommand Parse(string[] commands)
-        {
-            if(commands.Length == 1){
-                _logger("Parameters missing, mention the environment(s) that needs to be applied to file(s). E.g 'cit apply staging -f file1', 'cit apply testing staging -f file1'");
-                return null;
-            }
-            var applyArguments = commands.Skip(1).ToList();
-            var environments = applyArguments.TakeWhile(arg => !"-f".Equals(arg)).ToList(); 
-            
-            var files = new List<string>();           
-            var fileFlagIndex = applyArguments.FindIndex(arg => "-f".Equals(arg));
-            if(fileFlagIndex  != -1)
-            {
-                files = applyArguments.Skip(fileFlagIndex + 1).ToList();      
-            }
-
-            return new ApplyCommand {
-                Files = files,
-                Environments = environments
-            };
-        }
         private void ReplaceTemplate(string filePath, Dictionary<string, string> values)
         {
             if(!File.Exists(filePath))
