@@ -1,5 +1,5 @@
 using System;
-
+using cit.tasks.commands;
 using cit.utilities;
 
 namespace cit.tasks
@@ -14,23 +14,36 @@ namespace cit.tasks
 
         public int HandleCommand(string[] commands)
         {
-            if(commands.Length != 1 && commands.Length != 2)
+            var command = Parse(commands);
+            if(command == null)
             {
-                _logger("Wrong number of parameters specified");
                 return 1;
             }
-            if (!Store.IsEnvironmentExists(Constants.DefaultEnvName))
+            if (command.EnvName == Constants.DefaultEnvName && !Store.IsEnvironmentExists(Constants.DefaultEnvName))
             {
                 _logger($"Default environment not found.");
                 Store.Create(Constants.DefaultEnvName);
                 _logger($"Environment: default created succesfully.");
-            }
-            if(commands.Length == 1)
-            {
                 return 0;
             }
-            var envName = commands[1];
-            return new CopyTask(_logger).CopyEnvironment(Constants.DefaultEnvName, envName);
+            return new CopyTask(_logger).CopyEnvironment(Constants.DefaultEnvName, command.EnvName);
+        }
+
+        private InitCommand Parse(string[] commands)
+        {
+            if(commands.Length != 1 && commands.Length != 2)
+            {
+                _logger("Wrong number of parameters specified");
+                return null;
+            }
+            var envName = Constants.DefaultEnvName;
+            if(commands.Length == 2)
+            {
+                envName = commands[1];
+            }
+            return new InitCommand{
+                EnvName = envName
+            };
         }
     }
 }

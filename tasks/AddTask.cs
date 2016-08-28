@@ -1,5 +1,5 @@
 using System;
-
+using cit.tasks.commands;
 using cit.utilities;
 using cit.utilities.validators;
 
@@ -15,34 +15,46 @@ namespace cit.tasks
 
         public int HandleCommand(string[] commands)
         {
-            if(commands.Length != 4){
-                _logger("Parameters missig, mention all parameters. E.g 'cit add staging key value', 'cit add staging key \"value with spaces\"'");
+            var command = Parse(commands);
+            if(command == null)
+            {
                 return 1;
             }
-            var envName = commands[1];
-            var keyName =  commands[2];
-            var itemValue = commands[3];
-            if(!Store.IsEnvironmentExists(envName))
+            if(!Store.IsEnvironmentExists(command.EnvName))
             {
-                _logger($"Environment: {envName} does not exist. Create one using 'cit init {envName}' before proceeding.");
+                _logger($"Environment: {command.EnvName} does not exist. Create one using 'cit init {command.EnvName}' before proceeding.");
                 return 1;
             }
-            if(!Validators.KeyNameValidator.IsMatch(keyName))
+            if(!Validators.KeyNameValidator.IsMatch(command.KeyName))
             {
-                _logger($"Keyname: '{keyName}' should contain alphanumeric characters. E.g key, key01, key_1");
+                _logger($"Keyname: '{command.KeyName}' should contain alphanumeric characters. E.g key, key01, key_1");
                 return 1;
             }
             try
             {
-                Store.Add(envName, keyName, itemValue);
+                Store.Add(command.EnvName, command.KeyName, command.ItemValue);
             }
             catch(NoDefaultValueFoundException ex)
             {
                 _logger(ex.Message);
                 return 1;
             }
-            _logger($"Key: {keyName}, Value: {itemValue} added to Environment: {envName} successfully.");
+            _logger($"Key: {command.KeyName}, Value: {command.ItemValue} added to Environment: {command.EnvName} successfully.");
             return 0;
+        }
+
+        private AddCommand Parse(string[] commands)
+        {
+            if(commands.Length != 4){
+                _logger("Parameters missig, mention all parameters. E.g 'cit add staging key value', 'cit add staging key \"value with spaces\"'");
+                return null;
+            }
+
+            return new AddCommand {
+                EnvName = commands[1],
+                KeyName = commands[2],
+                ItemValue = commands[3]
+            };
         }
     }
 }

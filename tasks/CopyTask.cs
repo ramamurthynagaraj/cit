@@ -1,5 +1,5 @@
 using System;
-
+using cit.tasks.commands;
 using cit.utilities;
 using cit.utilities.validators;
 
@@ -15,12 +15,26 @@ namespace cit.tasks
 
         public int HandleCommand(string[] commands)
         {
+            var command = Parse(commands);
+            if(command == null)
+            {
+                return 1;
+            }
+
+            return CopyEnvironment(command.FromEnvName, command.ToEnvName);
+        }
+
+        private CopyCommand Parse(string[] commands)
+        {
             if (commands.Length != 3)
             {
                 _logger("Wrong number of parameters specified");
-                return 1;
+                return null;
             }
-            return CopyEnvironment(commands[1], commands[2]);
+            return new CopyCommand {
+                FromEnvName = commands[0],
+                ToEnvName = commands[1]
+            };
         }
 
         internal int CopyEnvironment(string fromEnv, string envName)
