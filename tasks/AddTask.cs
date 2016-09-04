@@ -1,4 +1,5 @@
 using System;
+using cit.secret_service;
 using cit.tasks.commands;
 using cit.utilities;
 using cit.utilities.validators;
@@ -31,7 +32,14 @@ namespace cit.tasks
             }
             try
             {
-                Store.Add(command.EnvName, command.KeyName, command.ItemValue);
+                var isSecure = false;
+                var itemValue = command.ItemValue;
+                if(command.Password != null)
+                {
+                    isSecure = true;
+                    itemValue = AESService.EncryptString(itemValue, command.Password, command.Salt);
+                }
+                Store.Add(command.EnvName, command.KeyName, itemValue);
             }
             catch(NoDefaultValueFoundException ex)
             {

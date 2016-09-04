@@ -14,9 +14,24 @@ namespace cit.cli
             _logger = logger;
         }
 
+        private string TakeNextTo(string flag, string[] commands)
+        {
+            return TakeAllOfNextTo(flag, commands)?.First();
+        }
+
+        private List<string> TakeAllOfNextTo(string flag, string[] commands)
+        {
+            var flagIndex = commands.ToList().FindIndex(arg => flag.Equals(arg));
+            if(flagIndex == -1 || commands.Length == flagIndex + 1)
+            {  
+                return null;
+            }
+            return commands.Skip(flagIndex + 1).ToList();
+        }
+
         public AddCommand TryAddCommand(string[] commands)
         {
-            if(commands.Length != 4){
+            if(commands.Length < 4){
                 _logger("Parameters missig, mention all parameters. E.g 'cit add staging key value', 'cit add staging key \"value with spaces\"'");
                 return null;
             }
@@ -24,7 +39,9 @@ namespace cit.cli
             return new AddCommand {
                 EnvName = commands[1],
                 KeyName = commands[2],
-                ItemValue = commands[3]
+                ItemValue = commands[3],
+                Password = TakeNextTo("-p", commands),
+                Salt = TakeNextTo("-s", commands)
             };
         }
 
@@ -36,16 +53,9 @@ namespace cit.cli
             }
             var applyArguments = commands.Skip(1).ToList();
             var environments = applyArguments.TakeWhile(arg => !"-f".Equals(arg)).ToList(); 
-            
-            var files = new List<string>();           
-            var fileFlagIndex = applyArguments.FindIndex(arg => "-f".Equals(arg));
-            if(fileFlagIndex  != -1)
-            {
-                files = applyArguments.Skip(fileFlagIndex + 1).ToList();      
-            }
 
             return new ApplyCommand {
-                Files = files,
+                Files = TakeAllOfNextTo("-f", commands),
                 Environments = environments
             };
         }

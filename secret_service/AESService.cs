@@ -11,9 +11,13 @@ namespace cit.secret_service
         private static int BLOCK_SIZE = 128;
         private static int LOCAL_SALT_LENGTH = 16;
 
-        public static string EncryptString(string text, string password)
+        public static string EncryptString(string text, string password, string salt)
         {
-            var salt = Encoding.UTF8.GetBytes("defaultCITSaltToBeUsed");
+            if(salt == null)
+            {
+                salt = "defaultCITSaltToBeUsed";
+            }
+            var saltBytes = Encoding.UTF8.GetBytes(salt);
             var pwdBytes = Encoding.UTF8.GetBytes(password);
             var pwdHash = SHA256.Create().ComputeHash(pwdBytes);
             var textBytes = Encoding.UTF8.GetBytes(text);
@@ -25,17 +29,21 @@ namespace cit.secret_service
             for (int i = 0; i < textBytes.Length; i++)
                 encrypted[i + textSalt.Length] = textBytes[i];
 
-            encrypted = Encrypt(encrypted, pwdHash, salt);
+            encrypted = Encrypt(encrypted, pwdHash, saltBytes);
             return Convert.ToBase64String(encrypted);
         }
 
-        public static string DecryptString(string text, string password)
+        public static string DecryptString(string text, string password, string salt)
         {
-            var salt = Encoding.UTF8.GetBytes("defaultCITSaltToBeUsed");            
+            if(salt == null)
+            {
+                salt = "defaultCITSaltToBeUsed";
+            }
+            var saltBytes = Encoding.UTF8.GetBytes(salt);            
             var pwdBytes = Encoding.UTF8.GetBytes(password);
             var pwdHash = SHA256.Create().ComputeHash(pwdBytes);
             var textBytes = Convert.FromBase64String(text);
-            var decrypted = Decrypt(textBytes, pwdHash, salt);
+            var decrypted = Decrypt(textBytes, pwdHash, saltBytes);
 
             var result = new byte[decrypted.Length - LOCAL_SALT_LENGTH];
             for (int i = 0; i < result.Length; i++)
