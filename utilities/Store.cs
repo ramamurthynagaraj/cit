@@ -12,6 +12,7 @@ namespace cit.utilities
     class Store
     {
         public static string AppName = "cit";
+        public static string SecureKeys = $"{AppName}_SecureKeys";
         private const string MetaDataFile = "cit-environments.json";
         private static string GetFileNameFor(string envName)
         {
@@ -46,14 +47,20 @@ namespace cit.utilities
             File.WriteAllText(MetaDataFile, defaultEnvJson.ToString());
         }
 
-        public static Dictionary<string, string> GetFinalValuesFor(List<string> environments)
+        private static string GetAppKeyFor(bool isSecure)
         {
+            return isSecure ? SecureKeys : AppName;
+        }
+        public static Dictionary<string, string> GetFinalValuesFor(List<string> environments, bool isSecure)
+        {
+            var appKey = GetAppKeyFor(isSecure);
             if(!environments.Any(env => env == DefaultEnvName))
             {
                 environments.Insert(0, DefaultEnvName);
             }
-            var finalJson = environments.Distinct().Select(env => GetJsonForFile(GetFileNameFor(env)).GetValue(AppName) as JObject)
-                .Aggregate((firstJson, secondJson) => {
+            var finalJson = environments.Distinct().Select(env => GetJsonForFile(GetFileNameFor(env)).GetValue(appKey) as JObject)
+                .Where(json => json != null)
+                .Aggregate(JObject.Parse(@"{}"), (firstJson, secondJson) => {
                     firstJson.Merge(secondJson, new JsonMergeSettings{
                         MergeArrayHandling = MergeArrayHandling.Replace
                     });
@@ -76,15 +83,17 @@ namespace cit.utilities
             File.WriteAllText(MetaDataFile, defaultEnvJson.ToString());
         }
 
-        public static void Add(string envName, string keyName, string value)
+        public static void Add(string envName, string keyName, string value, bool isSecure)
         {
             if(envName != DefaultEnvName && !HasDefaultValueFor(keyName))
             {
                 throw new NoDefaultValueFoundException("Cannot override without a default value. Please add default value first.");
             }
+            Remove(envName, keyName);
             var fileName = GetFileNameFor(envName);
             var existingJson = GetJsonForFile(fileName);
-            var newItem = JObject.Parse($"{{'{AppName}': {{'{keyName}': '{value}'}}}}");
+            var appKeyName = GetAppKeyFor(isSecure);
+            var newItem = JObject.Parse($"{{'{appKeyName}': {{'{keyName}': '{value}'}}}}");
             existingJson.Merge(newItem, new JsonMergeSettings{
                 MergeArrayHandling = MergeArrayHandling.Union
             });
@@ -94,14 +103,25 @@ namespace cit.utilities
         private static bool HasDefaultValueFor(string keyName)
         {
             var defaultJson = GetJsonForFile(GetFileNameFor(DefaultEnvName));
-            return defaultJson[AppName]?[keyName] != null;
+            return defaultJson[AppName]?[keyName] != null || defaultJson[SecureKeys]?[keyName] != null;
         }
 
         public static void Remove(string envName, string keyName)
         {
+            Remove(envName, keyName, false);
+            Remove(envName, keyName, true);
+        }
+
+        private static void Remove(string envName, string keyName, bool isSecure)
+        {
             var fileName = GetFileNameFor(envName);
             var existingJson = GetJsonForFile(fileName);
-            var allKeys = existingJson.GetValue(AppName) as JObject;
+            var appKeyName = GetAppKeyFor(isSecure);            
+            var allKeys = existingJson.GetValue(appKeyName) as JObject;
+            if(allKeys == null)
+            {
+                return;
+            }
             if(allKeys.Properties().Any(p => p.Name == keyName))
             {
                 allKeys.Property(keyName).Remove();

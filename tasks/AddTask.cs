@@ -39,7 +39,7 @@ namespace cit.tasks
                     isSecure = true;
                     itemValue = AESService.EncryptString(itemValue, command.Password, command.Salt);
                 }
-                Store.Add(command.EnvName, command.KeyName, itemValue);
+                Store.Add(command.EnvName, command.KeyName, itemValue, isSecure);
             }
             catch(NoDefaultValueFoundException ex)
             {

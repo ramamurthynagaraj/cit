@@ -16,17 +16,17 @@ namespace cit.cli
 
         private string TakeNextTo(string flag, string[] commands)
         {
-            return TakeAllOfNextTo(flag, commands)?.First();
+            return TakeAllOfNextTo(flag, commands, new string[0])?.First();
         }
 
-        private List<string> TakeAllOfNextTo(string flag, string[] commands)
+        private List<string> TakeAllOfNextTo(string flag, string[] commands, string[] until)
         {
             var flagIndex = commands.ToList().FindIndex(arg => flag.Equals(arg));
             if(flagIndex == -1 || commands.Length == flagIndex + 1)
             {  
                 return null;
             }
-            return commands.Skip(flagIndex + 1).ToList();
+            return commands.Skip(flagIndex + 1).TakeWhile(cmd => !until.Contains(cmd)).ToList();
         }
 
         public AddCommand TryAddCommand(string[] commands)
@@ -55,8 +55,10 @@ namespace cit.cli
             var environments = applyArguments.TakeWhile(arg => !"-f".Equals(arg)).ToList(); 
 
             return new ApplyCommand {
-                Files = TakeAllOfNextTo("-f", commands),
-                Environments = environments
+                Files = TakeAllOfNextTo("-f", commands, new string[]{"-p", "-s"}),
+                Environments = environments,
+                Password = TakeNextTo("-p", commands),
+                Salt = TakeNextTo("-s", commands)
             };
         }
 

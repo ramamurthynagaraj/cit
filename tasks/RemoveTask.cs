@@ -19,11 +19,6 @@ namespace cit.tasks
             {
                 return 1;
             }
-            if (command.EnvName == Constants.DefaultEnvName)
-            {
-                _logger("Removing the key from default environment will delete it from other environment as well.");
-                return 1;
-            }
             if (!Validators.EnvNameValidator.IsMatch(command.EnvName))
             {
                 _logger("Environment name cannot be empty and should contain alphanumeric characters. E.g staging, staging01, staging_1");
@@ -37,6 +32,11 @@ namespace cit.tasks
             if(!Validators.KeyNameValidator.IsMatch(command.KeyName))
             {
                 _logger($"Keyname: '{command.KeyName}' should contain alphanumeric characters. E.g key, key01, key_1");
+                return 1;
+            }
+            if (command.EnvName == Constants.DefaultEnvName)
+            {
+                _logger("Removing the key from default environment will delete it from other environment as well.");
                 return 1;
             }
             Store.Remove(command.EnvName, command.KeyName);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using cit.utilities;
 using cit.tasks.commands;
+using cit.secret_service;
 
 namespace cit.tasks
 {
@@ -38,7 +39,13 @@ namespace cit.tasks
                 return 1;
             }
 
-            var finalValues = Store.GetFinalValuesFor(command.Environments);
+            var normalValues = Store.GetFinalValuesFor(command.Environments, false);
+            var secureValues = Store.GetFinalValuesFor(command.Environments, true).Select(pair => {
+                var decryptedValue = AESService.DecryptString(pair.Value, command.Password, command.Salt);
+                return new KeyValuePair<string, string>(pair.Key, decryptedValue);
+            }).ToDictionary(pair => pair.Key, pair => pair.Value);
+            var finalValues = normalValues.Union(secureValues).ToDictionary(pair => pair.Key, pair => pair.Value);
+
             try{
                 command.Files.ForEach(filePath => ReplaceTemplate(filePath, finalValues));
             }
@@ -58,7 +65,7 @@ namespace cit.tasks
                 throw new TemplateFileNotFoundException($"{filePath} not found. Please verify if it exists.");
             }
             var fileContent = File.ReadAllText(filePath);
-            var newFileContent = values.Keys.ToList().Aggregate(fileContent, (content, key) => {
+            var newFileContent = values.Keys.ToList().OrderByDescending(key => key.Length).Aggregate(fileContent, (content, key) => {
                 return content.Replace($"#{key}", values[key]);
             });
             File.WriteAllText(filePath, newFileContent);
