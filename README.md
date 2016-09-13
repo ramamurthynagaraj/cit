@@ -16,6 +16,11 @@ Initiates env-name. Initiates cit default environment, if not found.
 Adds the supplied key & value entry to given env-name.
 To add default value that applies to all environments, use `add default <key> <value>`.
 
+### - add env-name key value -p password -s salt
+Adds the supplied key & value entry to given env-name securely. The value is encrypted using the provided password and salt.
+To add default secure value that applies to all environments, use `add default <key> <value> -p password -s salt`.
+Please use the same password and salt for all secure keys.
+
 ### - remove env-name key
 Removes the key entry from the given env-name.
 
@@ -30,11 +35,13 @@ Apply does the following,
   * Merges the key-values from the supplied list of environments. Value available in last specified environment takes precedence.
   * Replaces the occurences of **#key** with its corresponding value for the set of files specified.
 
+Optionally pass `-p password -s salt` if secure keys needs to decrypted while applying.
+
 ### - help
 Shows the usage instructions for this tool.
 
 ## Features in the backlog
-* Enhance existing functionality and fix gaps.
-* Ability to have secure values.
 * Plugin support to define data storage mechanism.
+* Help command.
+* Make flags and named parameters order independent. e.g `add -p password -s salt key value` Nice to Have!.
 
