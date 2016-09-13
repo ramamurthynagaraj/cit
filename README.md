@@ -43,5 +43,7 @@ Shows the usage instructions for this tool.
 ## Features in the backlog
 * Plugin support to define data storage mechanism.
 * Help command.
+* Tests.
+* Platform specific Executables.
 * Make flags and named parameters order independent. e.g `add -p password -s salt key value` Nice to Have!.
 
